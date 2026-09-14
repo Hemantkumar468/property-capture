@@ -760,19 +760,19 @@ export default function Phase4Assessment({
                     selectedItem.progress.map((item, idx) => (
                       <div key={idx} className="flex items-center justify-between p-1.5 rounded-lg bg-gray-50/50 dark:bg-[#1E293B]">
                         <div className="flex items-center gap-2">
-                          {item.checked ? (
+                          {item.status === 'Completed' ? (
                             <CheckCircle2 className="w-4 h-4 text-[#1F9D6A]" />
                           ) : item.status === 'In Progress' ? (
-                            <span className="w-4 h-4 rounded-full border-2 border-[#3B82C4] border-t-transparent animate-spin" />
+                            <span className="w-4 h-4 rounded-full border-2 border-[#3B82C4] bg-[#3B82C4]/15" />
                           ) : (
                             <span className="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-700" />
                           )}
-                          <span className="font-semibold text-gray-800 dark:text-gray-200">{item.name}</span>
+                          <span className="font-semibold text-gray-800 dark:text-gray-200">{item.title}</span>
                         </div>
                         <span className={`text-[10.5px] font-bold ${
-                          item.checked ? 'text-[#1F9D6A]' : item.status === 'In Progress' ? 'text-[#3B82C4]' : 'text-gray-400'
+                          item.status === 'Completed' ? 'text-[#1F9D6A]' : item.status === 'In Progress' ? 'text-[#3B82C4]' : 'text-gray-400'
                         }`}>
-                          {item.date}
+                          {item.status}
                         </span>
                       </div>
                     ))

@@ -507,7 +507,8 @@ export const initialAssessmentsData = [
     progress: [
       { title: 'Technical Feasibility', status: 'Completed', detail: 'Ceiling height 11.5 ft, layout suitable for 4 escape rooms.' },
       { title: 'Commercial Viability', status: 'In Progress', detail: 'Rent ROI & footfall estimation in progress.' },
-      { title: 'Legal Clearance', status: 'Pending', detail: 'Awaiting fire safety & NOC verification.' }
+      { title: 'Legal Clearance', status: 'Pending', detail: 'Awaiting fire safety & NOC verification.' },
+      { title: 'Commercial Finalization', status: 'Pending', detail: 'Awaiting agreed rent, deposit & escalation terms before moving to LOI.' }
     ],
     documents: [
       { name: 'Site_Technical_Report.pdf', date: '12 Sep 2025', size: '2.4 MB' }

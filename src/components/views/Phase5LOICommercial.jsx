@@ -782,22 +782,14 @@ export default function Phase5LOICommercial({
                 </div>
               </div>
 
-              {/* BOTTOM 3 BUTTONS */}
-              <div className="pt-2 border-t border-gray-200 dark:border-gray-800 grid grid-cols-3 gap-1.5">
+              {/* BOTTOM 2 BUTTONS */}
+              <div className="pt-2 border-t border-gray-200 dark:border-gray-800 grid grid-cols-2 gap-1.5">
                 <button
                   onClick={() => setIsViewLOIOpen(true)}
                   className="py-2 px-1.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1E293B] hover:bg-gray-50 text-gray-800 dark:text-gray-200 font-bold text-[11px] flex items-center justify-center gap-1 shadow-sm transition-all truncate"
                 >
                   <FileSignature className="w-3.5 h-3.5 text-[#3B82C4] shrink-0" />
                   <span className="truncate">View LOI Draft</span>
-                </button>
-
-                <button
-                  onClick={() => setIsUpdateStageOpen(true)}
-                  className="py-2 px-1.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1E293B] hover:bg-gray-50 text-gray-800 dark:text-gray-200 font-bold text-[11px] flex items-center justify-center gap-1 shadow-sm transition-all truncate"
-                >
-                  <Edit className="w-3.5 h-3.5 text-gray-500 shrink-0" />
-                  <span className="truncate">Update Stage</span>
                 </button>
 
                 <button
