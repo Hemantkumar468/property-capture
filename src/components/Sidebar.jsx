@@ -1,10 +1,5 @@
 import React from 'react';
 import {
-  LayoutDashboard,
-  FolderKanban,
-  Users,
-  Database,
-  ShoppingBag,
   Compass,
   MapPin,
   CheckCircle,
@@ -103,40 +98,6 @@ export default function Sidebar({
           >
             <X className="w-4 h-4" />
           </button>
-        </div>
-
-        {/* MAIN NAVIGATION MENU */}
-        <div className="p-2.5 space-y-0.5 border-b border-[#1F2937]">
-          {[
-            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { id: 'pms', label: 'PMS', icon: FolderKanban },
-            { id: 'employees', label: 'Employees', icon: Users },
-            { id: 'master_data', label: 'Master Data', icon: Database },
-            { id: 'purchase', label: 'Purchase', icon: ShoppingBag }
-          ].map((item) => {
-            const isActive = activePhase === item.id;
-            const Icon = item.icon;
-            return (
-              <div 
-                key={item.id}
-                onClick={() => {
-                  setActivePhase(item.id);
-                  if (window.innerWidth < 768) setMobileSidebarOpen(false);
-                }}
-                className={`flex items-center justify-between p-2 rounded-lg cursor-pointer text-[12px] font-semibold transition-all ${
-                  isActive 
-                    ? 'bg-[#C88A18] text-white shadow-[0_2px_10px_rgba(200,138,24,0.3)]' 
-                    : 'text-[#9CA3AF] hover:bg-[#172033] hover:text-white'
-                }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#6B7280]'}`} />
-                  <span>{item.label}</span>
-                </div>
-                <ChevronRight className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#4B5563]'}`} />
-              </div>
-            );
-          })}
         </div>
 
         {/* PROPERTY FMS SECTION */}
