@@ -172,60 +172,6 @@ export default function WorkflowStepper({
   return (
     <div className="space-y-3 mb-3">
       
-      {/* 1. HERO BANNER */}
-      <div className={`p-4 rounded-2xl border shadow-sm transition-colors relative overflow-hidden flex flex-col lg:flex-row lg:items-center justify-between gap-4 ${
-        darkMode ? 'bg-[#172033] border-[#253046]' : 'bg-white border-[#E2E8F0]'
-      }`}>
-        
-        {/* Banner Left Title */}
-        <div className="flex items-center gap-3 z-10">
-          <div className="w-10 h-10 rounded-xl bg-[#F5E8C8] text-[#C88A18] flex items-center justify-center text-xl shrink-0 font-bold border border-[#C88A18]/30 shadow-sm">
-            <FolderPlus className="w-5 h-5 text-[#C88A18]" />
-          </div>
-          <div>
-            <h1 className="text-xl font-black tracking-tight text-gray-900 dark:text-white leading-tight">
-              {hero.title}
-            </h1>
-            <p className="text-xs text-gray-500 dark:text-[#94A3B8] mt-0.5 leading-snug font-medium">
-              {hero.desc}
-            </p>
-          </div>
-        </div>
-
-        {/* Banner Center Quote */}
-        <div className="hidden xl:flex items-center gap-2.5 px-4 py-2 rounded-xl bg-amber-500/5 border border-amber-500/15 text-xs font-semibold text-gray-700 dark:text-amber-200">
-          <div className="w-0.5 h-6 bg-[#C88A18] rounded-full" />
-          <span className="italic">{hero.quote}</span>
-        </div>
-
-        {/* Banner Far Right Image */}
-        <div className="flex items-center gap-3 z-10 shrink-0">
-          <div className="w-44 sm:w-56 h-16 rounded-xl overflow-hidden shrink-0 border border-white/20 shadow-md relative hidden sm:block">
-            <img
-              src="/mystery_rooms_banner.jpg"
-              alt="Mystery Rooms Storefront"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#172033]/70 via-transparent to-[#172033]/30" />
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#C88A18]" />
-            <div className="absolute top-2 left-2.5 px-2 py-0.5 rounded-md bg-black/40 backdrop-blur-sm text-[9.5px] font-extrabold text-[#F5E8C8] tracking-wide uppercase">
-              {hero.badgeTitle}
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      {/* 2. FUNNEL STATS — the same six-stage row the Overview shows, so the
-             whole pipeline stays visible on every phase, current one highlighted. */}
-      <FunnelStatsRow
-        activePhase={activePhase}
-        setActivePhase={setActivePhase}
-        personLeads={personLeads}
-        properties={properties}
-        branches={branches}
-      />
-
       {/* 3. SUMMARY CARDS (5 cards in 1 row for Phase 6, custom rows for other phases) */}
       {activePhase === 1 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

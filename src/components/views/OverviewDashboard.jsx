@@ -68,7 +68,7 @@ export function OverviewHero() {
           </div>
           <div>
             <h1 className="text-[20px] font-black tracking-tight text-[#1F2A44]">
-              Property FMS Overview
+              Property FMS Dashboard
             </h1>
             <p className="mt-0.5 text-[12px] font-medium text-[#64748B]">
               Complete visibility from opportunity to project creation.
@@ -814,9 +814,6 @@ export default function OverviewDashboard({
 
   return (
     <div className="space-y-4">
-      {/* 1. TOP HERO BANNER */}
-      <OverviewHero />
-
       {/* 2. KPI SUMMARY CARDS (6 CARDS ROW) */}
       <FunnelStatsRow
         activePhase="overview"

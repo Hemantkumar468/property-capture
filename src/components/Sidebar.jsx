@@ -161,7 +161,7 @@ export default function Sidebar({
           >
             <div className="flex items-center gap-2.5">
               <MapPin className={`w-4 h-4 ${activePhase === 'overview' ? 'text-[#C88A18]' : 'text-[#6B7280]'}`} />
-              <span className={activePhase === 'overview' ? 'text-white' : 'text-[#9CA3AF]'}>Overview</span>
+              <span className={activePhase === 'overview' ? 'text-white' : 'text-[#9CA3AF]'}>Dashboard</span>
             </div>
             <ChevronRight className={`w-3.5 h-3.5 ${activePhase === 'overview' ? 'text-[#C88A18]' : 'text-[#4B5563]'}`} />
           </div>
@@ -254,26 +254,6 @@ export default function Sidebar({
             );
           })}
 
-          {/* BOTTOM PROMOTIONAL CARD */}
-          <div className="mt-4 mb-2 p-3 rounded-xl bg-[#131B2A] border border-[#1F2937] relative overflow-hidden shadow-md group">
-            <div className="relative z-10 pr-1 max-w-[125px]">
-              <div className="text-white text-[11px] font-extrabold leading-tight tracking-tight">
-                From<br />
-                Locations<br />
-                to Legendary<br />
-                <span className="text-[#C88A18]">Experiences.</span>
-              </div>
-              <p className="text-[9.5px] text-gray-400 mt-1 leading-snug">
-                Building India's<br />
-                most iconic<br />
-                entertainment venues.
-              </p>
-            </div>
-            <div className="absolute right-2 bottom-2 w-16 h-24 rounded-lg overflow-hidden border border-white/10 shadow-lg">
-              <img src="/sidebar_promo.jpg" alt="Mystery Rooms Building" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-            </div>
-          </div>
 
         </div>
 
