@@ -257,38 +257,6 @@ export default function Sidebar({
 
         </div>
 
-        {/* BOTTOM USER SECTION */}
-        <div className="p-3 border-t border-[#1F2937] bg-[#0B0F19] space-y-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-sm border border-indigo-400/30">
-                HK
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-white text-[12px] font-bold truncate">
-                  Hemant Kushwaha
-                </div>
-                <div className="text-[#6B7280] text-[10px] truncate">
-                  Project Developer
-                </div>
-              </div>
-            </div>
-            <button className="text-gray-400 hover:text-white p-1 rounded-md transition-colors">
-              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between text-[11px] text-[#9CA3AF] pt-1 border-t border-[#1F2937]/60">
-            <button className="flex items-center gap-1.5 hover:text-white transition-colors">
-              <Settings className="w-3.5 h-3.5 text-[#6B7280]" />
-              <span>Settings</span>
-            </button>
-            <button className="flex items-center gap-1.5 hover:text-red-400 transition-colors">
-              <LogOut className="w-3.5 h-3.5 text-[#6B7280]" />
-              <span>Logout</span>
-            </button>
-          </div>
-        </div>
 
       </aside>
     </>

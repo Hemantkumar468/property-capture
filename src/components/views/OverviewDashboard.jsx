@@ -16,7 +16,6 @@ import {
   User,
   Users,
   Wallet,
-  Rocket,
   BriefcaseBusiness,
   MoreHorizontal,
   ArrowRight,
@@ -28,10 +27,7 @@ import {
 } from 'lucide-react';
 
 import FunnelStatsRow from '../FunnelStatsRow';
-import { buildFunnelStats } from '../../utils/funnelStats';
 import { computeOpportunityCounts } from '../../utils/opportunities';
-import { computeProjectCounts } from '../../utils/projects';
-import { initialProjectsData } from '../../data/fmsData';
 
 // ==========================================
 // 1. REUSABLE COMPONENT: StatusBadge
@@ -97,102 +93,6 @@ export function OverviewHero() {
           <div className="absolute bottom-2 left-2 right-2 rounded-lg border border-white/20 bg-[#111827]/85 p-2 text-left text-[10.5px] font-bold leading-tight text-white shadow-lg backdrop-blur-md truncate">
             Turning opportunities into extraordinary experiences.
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ==========================================
-// 4. REUSABLE COMPONENT: PropertyPipeline & PipelineStep
-// ==========================================
-export function PropertyPipeline({ setActivePhase, personLeads, properties, branches }) {
-  // Same numbers as the funnel row above, from the same helpers each phase
-  // page uses — the pipeline can't disagree with the stats sitting over it.
-  const funnel = buildFunnelStats({ personLeads, properties, branches });
-  const byPhase = (n) => funnel.find((f) => f.phase === n)?.value ?? 0;
-  const projects = computeProjectCounts(initialProjectsData);
-
-  const steps = [
-    { id: 1, label: 'Property Capture', value: byPhase(1), subtitle: 'Leads & properties', done: true },
-    { id: 2, label: 'Review & Decision', value: byPhase(2), subtitle: 'MD reviews', active: true },
-    { id: 3, label: 'Property Research', value: byPhase(3), subtitle: 'Find locations' },
-    { id: 4, label: 'Assessment', value: byPhase(4), subtitle: 'Feasibility checks' },
-    { id: 5, label: 'LOI & Commercial', value: byPhase(5), subtitle: 'Negotiation' },
-    { id: 6, label: 'Project Creation', value: byPhase(6), subtitle: 'Launch in PMS' },
-    { id: 7, label: 'PMS Launch', value: projects.inProgress + projects.completed, subtitle: 'Ready / Active', isFinal: true },
-  ];
-
-  return (
-    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-[0_4px_16px_rgba(15,23,42,0.04)]">
-      <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#F1F5F9]">
-        <div>
-          <h2 className="text-[15px] font-black tracking-tight text-[#1F2A44] flex items-center gap-2">
-            <Rocket className="w-4 h-4 text-[#C88A18]" />
-            Property Pipeline
-          </h2>
-          <p className="mt-0.5 text-[11.5px] font-medium text-[#64748B]">
-            Track opportunities across all stages
-          </p>
-        </div>
-      </div>
-
-      {/* overflow-x-auto makes overflow-y compute as `auto`, so this box clips
-          vertically — the active node's ring/glow needs the vertical padding
-          or its top gets sliced off. */}
-      <div className="mt-3 overflow-x-auto py-3 sidebar-scroll">
-        <div className="flex min-w-[920px] items-center justify-between px-2">
-          {steps.map((step, idx) => {
-            return (
-              <React.Fragment key={step.id}>
-                {/* PIPELINE NODE */}
-                <div
-                  onClick={() => setActivePhase && step.id <= 6 && setActivePhase(step.id)}
-                  className="group flex flex-col items-center cursor-pointer min-w-[115px] transition-transform hover:scale-105"
-                >
-                  <div
-                    className={`relative flex h-10 w-10 items-center justify-center rounded-full border-2 text-[12.5px] font-black transition-all ${
-                      step.done
-                        ? 'bg-[#C88A18] text-white border-[#F4E1B5] shadow-[0_2px_10px_rgba(200,138,24,0.3)]'
-                        : step.active
-                          ? 'bg-[#C88A18] text-white border-[#F4E1B5] shadow-[0_0_15px_rgba(200,138,24,0.4)] ring-4 ring-[#C88A18]/20'
-                          : step.isFinal
-                            ? 'border-[#C88A18] bg-[#FFF4D6] text-[#C88A18] shadow-[0_0_0_4px_rgba(200,138,24,0.2)]'
-                            : 'bg-gray-100 border-gray-300 text-gray-500 group-hover:border-[#C88A18]'
-                    }`}
-                  >
-                    {step.done ? (
-                      <Check className="h-4.5 w-4.5 stroke-[3]" />
-                    ) : (
-                      <span>{step.id}</span>
-                    )}
-                  </div>
-
-                  <div className="mt-2.5 text-center">
-                    <div className={`text-[11.5px] font-bold group-hover:text-[#C88A18] transition-colors whitespace-nowrap ${
-                      step.active ? 'text-[#C88A18]' : 'text-[#1F2A44]'
-                    }`}>
-                      {step.label}
-                    </div>
-                    <div className="mt-0.5 text-[17px] font-black tracking-tight text-[#1F2A44]">
-                      {step.value}
-                    </div>
-                    <div className="text-[10px] font-medium text-[#64748B] whitespace-nowrap">
-                      {step.subtitle}
-                    </div>
-                  </div>
-                </div>
-
-                {/* CONNECTOR LINE */}
-                {idx < steps.length - 1 && (
-                  <div className="flex-1 flex items-center justify-center px-1 mb-8">
-                    <div className={`h-[2px] w-full rounded-full ${step.done ? 'bg-[#C88A18]' : 'bg-[#CBD5E1]'}`} />
-                    <ChevronRight className={`h-3.5 w-3.5 -ml-2 shrink-0 ${step.done ? 'text-[#C88A18]' : 'text-[#CBD5E1]'}`} />
-                  </div>
-                )}
-              </React.Fragment>
-            );
-          })}
         </div>
       </div>
     </div>
@@ -828,9 +728,6 @@ export default function OverviewDashboard({
       <div className="grid gap-4 xl:grid-cols-[1.85fr_1fr]">
         {/* LEFT COLUMN */}
         <div className="space-y-4 min-w-0">
-          {/* PROPERTY PIPELINE */}
-          <PropertyPipeline setActivePhase={setActivePhase} personLeads={personLeads} properties={properties} branches={branches} />
-
           {/* SUB-GRID: ACTION REQUIRED + TOP OPPORTUNITIES */}
           <div className="grid gap-4 md:grid-cols-2">
             <ActionRequired setActivePhase={setActivePhase} showToast={showToast} />

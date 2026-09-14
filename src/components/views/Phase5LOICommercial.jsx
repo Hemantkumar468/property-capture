@@ -36,6 +36,7 @@ import {
 } from 'lucide-react';
 import { initialDealsData } from '../../data/fmsData';
 import { computeDealCounts } from '../../utils/deals';
+import { downloadLoiPdf, openLoiPdfInNewTab, printLoiDocument } from '../../utils/pdfGenerator';
 
 export default function Phase5LOICommercial({ 
   setActivePhase, 
@@ -936,56 +937,166 @@ export default function Phase5LOICommercial({
 
       {/* ---------------- MODAL 1: VIEW / GENERATE LOI DRAFT ---------------- */}
       {isViewLOIOpen && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
-          <div className={`w-full max-w-lg rounded-2xl border shadow-2xl overflow-hidden p-6 ${
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <div className={`w-full max-w-xl rounded-2xl border shadow-2xl overflow-hidden p-6 ${
             darkMode ? 'bg-[#172033] border-[#253046] text-white' : 'bg-white border-[#E2E8F0] text-gray-900'
           }`}>
+            {/* Modal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-gray-200 dark:border-gray-800">
-              <h3 className="font-extrabold text-sm flex items-center gap-2">
-                <FileSignature className="w-4 h-4 text-[#C88A18]" />
-                <span>Letter of Intent (LOI) — {selectedItem.propertyName}</span>
-              </h3>
-              <button onClick={() => setIsViewLOIOpen(false)} className="text-gray-400 hover:text-white">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="my-4 p-4 rounded-xl border bg-gray-50 dark:bg-[#1E293B] border-gray-200 dark:border-gray-700 text-xs space-y-3 font-mono leading-relaxed max-h-[350px] overflow-y-auto">
-              <div className="text-center font-bold text-sm underline uppercase">LETTER OF INTENT (LOI)</div>
-              <div><b>Date:</b> {selectedItem.startedOn}</div>
-              <div><b>To:</b> Property Owner / Lessor ({selectedItem.propertyName})</div>
-              <div><b>From:</b> Mystery Rooms Gaming Private Limited</div>
-              <div><b>Subject:</b> Proposal for Lease of Commercial Space at {selectedItem.location}</div>
-              <hr className="border-gray-300 dark:border-gray-700" />
-              <div><b>Premises:</b> {selectedItem.propertyName}, {selectedItem.fullAddress} ({selectedItem.sqft})</div>
-              <div><b>Lessee:</b> Mystery Rooms / {selectedItem.leadName} ({selectedItem.sourceTag})</div>
-              <div><b>Monthly Rent:</b> {selectedItem.rent}</div>
-              <div><b>Security Deposit:</b> {selectedItem.deposit}</div>
-              <div><b>Lease Period:</b> {selectedItem.leaseTerm} (Lock-in: {selectedItem.lockIn})</div>
-              <div><b>Escalation:</b> {selectedItem.escalation}</div>
-              <p className="text-[11px] font-sans text-gray-500 pt-2">
-                This Letter of Intent sets out the principal terms of agreement for the leasing of the aforementioned property. Final binding agreement is subject to legal clearance.
-              </p>
-            </div>
-
-            <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-800 text-xs">
-              <button 
-                onClick={() => showToast('Printing LOI document...')}
-                className="px-3 py-1.5 rounded-xl border border-gray-300 dark:border-gray-700 font-bold flex items-center gap-1.5 text-gray-700 dark:text-gray-200"
-              >
-                <Printer className="w-3.5 h-3.5" /> Print
-              </button>
-              
               <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-[#FFF4D6] dark:bg-[#C88A18]/20 border border-[#C88A18]/40 flex items-center justify-center text-[#C88A18]">
+                  <FileSignature className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-sm leading-tight">
+                    Letter of Intent (LOI)
+                  </h3>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                    {selectedItem.propertyName}
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsViewLOIOpen(false)} 
+                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <X className="w-4.5 h-4.5" />
+              </button>
+            </div>
+
+            {/* Document Paper Preview Sheet */}
+            <div className="my-4 max-h-[420px] overflow-y-auto pr-1 sidebar-scroll">
+              <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0F172A] p-5 shadow-inner space-y-4 text-xs font-sans text-gray-800 dark:text-gray-200">
+                
+                {/* Official Letterhead Header */}
+                <div className="border-b border-gray-200 dark:border-gray-700 pb-3 flex items-center justify-between">
+                  <div>
+                    <h4 className="font-black text-sm text-[#1F2A44] dark:text-white tracking-tight">
+                      MYSTERY ROOMS GAMING PRIVATE LIMITED
+                    </h4>
+                    <p className="text-[10px] font-bold text-[#C88A18] uppercase tracking-wider mt-0.5">
+                      Enterprise Console — Property FMS
+                    </p>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-md bg-[#FFF4D6] text-[#C88A18] font-bold text-[10px] border border-[#F3DCA0]">
+                    OFFICIAL DRAFT
+                  </span>
+                </div>
+
+                {/* Document Metadata Grid */}
+                <div className="grid grid-cols-2 gap-3 bg-gray-50 dark:bg-[#1E293B] p-3 rounded-lg border border-gray-200/80 dark:border-gray-700/80 text-[11px]">
+                  <div>
+                    <span className="text-gray-500 dark:text-gray-400 font-medium block">Date:</span>
+                    <strong className="text-gray-900 dark:text-white">{selectedItem.startedOn || '14 Sep 2025'}</strong>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 dark:text-gray-400 font-medium block">From:</span>
+                    <strong className="text-gray-900 dark:text-white">Mystery Rooms Gaming Pvt. Ltd.</strong>
+                  </div>
+                  <div className="col-span-2">
+                    <span className="text-gray-500 dark:text-gray-400 font-medium block">To / Lessor:</span>
+                    <strong className="text-gray-900 dark:text-white">Property Owner / Lessor ({selectedItem.propertyName})</strong>
+                  </div>
+                  <div className="col-span-2">
+                    <span className="text-gray-500 dark:text-gray-400 font-medium block">Subject:</span>
+                    <strong className="text-[#C88A18]">Proposal for Lease of Commercial Space at {selectedItem.location}</strong>
+                  </div>
+                </div>
+
+                {/* Key Commercial Terms Box */}
+                <div className="rounded-lg border border-[#F3DCA0] bg-[#FFF9EE] dark:bg-[#172033] dark:border-[#C88A18]/30 p-3.5 space-y-2.5">
+                  <h5 className="font-extrabold text-[11px] text-[#1F2A44] dark:text-[#F5E8C8] uppercase tracking-wide flex items-center gap-1.5 border-b border-[#F3DCA0] dark:border-gray-700 pb-1.5">
+                    <FileCheck className="w-3.5 h-3.5 text-[#C88A18]" />
+                    Summary of Commercial & Lease Terms
+                  </h5>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                    <div className="sm:col-span-2">
+                      <span className="text-gray-500 dark:text-gray-400 font-medium">Premises: </span>
+                      <span className="font-bold text-gray-900 dark:text-white">{selectedItem.propertyName}, {selectedItem.fullAddress || selectedItem.location} ({selectedItem.sqft})</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 dark:text-gray-400 font-medium">Lessee: </span>
+                      <span className="font-bold text-gray-900 dark:text-white">Mystery Rooms / {selectedItem.leadName}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 dark:text-gray-400 font-medium">Monthly Rent: </span>
+                      <span className="font-extrabold text-[#C88A18]">{selectedItem.rent}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 dark:text-gray-400 font-medium">Security Deposit: </span>
+                      <span className="font-bold text-gray-900 dark:text-white">{selectedItem.deposit}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 dark:text-gray-400 font-medium">Lease Period: </span>
+                      <span className="font-bold text-gray-900 dark:text-white">{selectedItem.leaseTerm} (Lock-in: {selectedItem.lockIn})</span>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <span className="text-gray-500 dark:text-gray-400 font-medium">Escalation: </span>
+                      <span className="font-bold text-gray-900 dark:text-white">{selectedItem.escalation}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Legal Terms Notice */}
+                <p className="text-[10.5px] italic text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-[#1E293B]/60 p-2.5 rounded-lg border border-gray-200 dark:border-gray-800 leading-snug">
+                  This Letter of Intent (LOI) sets out the principal terms of agreement for the leasing of the aforementioned property. Final binding agreement is subject to legal clearance.
+                </p>
+
+                {/* Signatures Preview Block */}
+                <div className="pt-3 border-t border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-between text-[10px] text-gray-500 font-bold">
+                  <div>
+                    <div className="w-24 border-b border-gray-400 dark:border-gray-600 mb-1" />
+                    Authorized Signatory
+                  </div>
+                  <div className="text-right">
+                    <div className="w-24 border-b border-gray-400 dark:border-gray-600 mb-1 ml-auto" />
+                    Property Owner / Lessor
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Modal Actions Footer */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-gray-200 dark:border-gray-800 text-xs">
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => {
+                    printLoiDocument(selectedItem);
+                    if (showToast) showToast('Opening print dialog for LOI...');
+                  }}
+                  className="px-3 py-1.5 rounded-xl border border-gray-300 dark:border-gray-700 font-bold flex items-center gap-1.5 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  title="Print LOI document"
+                >
+                  <Printer className="w-3.5 h-3.5 text-gray-500" /> Print
+                </button>
+
+                <button 
+                  onClick={() => {
+                    openLoiPdfInNewTab(selectedItem);
+                    if (showToast) showToast('Opening PDF in new tab...');
+                  }}
+                  className="px-3 py-1.5 rounded-xl border border-[#C88A18]/40 text-[#C88A18] font-bold flex items-center gap-1.5 bg-[#FFF4D6]/50 dark:bg-[#C88A18]/10 hover:bg-[#FFF4D6] transition-colors"
+                  title="Open PDF document directly in new browser tab"
+                >
+                  <Eye className="w-3.5 h-3.5" /> Preview PDF
+                </button>
+              </div>
+              
+              <div className="flex items-center gap-2 ml-auto">
                 <button
                   onClick={() => setIsViewLOIOpen(false)}
-                  className="px-3.5 py-1.5 rounded-xl border border-gray-300 dark:border-gray-700 font-bold text-gray-600 dark:text-gray-300"
+                  className="px-3.5 py-1.5 rounded-xl border border-gray-300 dark:border-gray-700 font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   Close
                 </button>
                 <button
-                  onClick={() => { setIsViewLOIOpen(false); showToast('LOI PDF downloaded!'); }}
-                  className="px-4 py-1.5 rounded-xl bg-[#C88A18] hover:bg-[#a87413] text-white font-bold shadow-md flex items-center gap-1.5"
+                  onClick={() => {
+                    downloadLoiPdf(selectedItem);
+                    if (showToast) showToast('Downloading LOI PDF document...');
+                  }}
+                  className="px-4 py-1.5 rounded-xl bg-[#C88A18] hover:bg-[#a87413] text-white font-bold shadow-md flex items-center gap-1.5 transition-colors"
                 >
                   <Download className="w-3.5 h-3.5" /> Download PDF
                 </button>
