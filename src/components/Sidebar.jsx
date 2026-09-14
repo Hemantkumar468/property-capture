@@ -1,0 +1,316 @@
+import React from 'react';
+import {
+  LayoutDashboard,
+  FolderKanban,
+  Users,
+  Database,
+  ShoppingBag,
+  Compass,
+  MapPin,
+  CheckCircle,
+  Search,
+  FileCheck,
+  FileSignature,
+  FolderPlus,
+  ChevronRight,
+  ChevronDown,
+  Settings,
+  LogOut,
+  X,
+  Check,
+  Folder,
+  PlusCircle,
+  Clock,
+  PauseCircle,
+  CheckCircle2,
+  XCircle,
+  Layers,
+  User,
+  Building2,
+  Store
+} from 'lucide-react';
+
+export default function Sidebar({
+  activePhase,
+  setActivePhase,
+  selectedSubFilter,
+  setSelectedSubFilter,
+  currentSubTab,
+  setCurrentSubTab,
+  mobileSidebarOpen,
+  setMobileSidebarOpen
+}) {
+  const phases = [
+    { num: '01', id: 1, label: 'Property Capture', icon: MapPin },
+    { num: '02', id: 2, label: 'Review & Decision', icon: CheckCircle },
+    { num: '03', id: 3, label: 'Property Research', icon: Search },
+    { num: '04', id: 4, label: 'Assessment', icon: FileCheck },
+    { num: '05', id: 5, label: 'LOI & Commercial', icon: FileSignature },
+    { num: '06', id: 6, label: 'Project Creation', icon: FolderPlus },
+  ];
+
+  const projectSubFilters = [
+    { id: 'all_projects', label: 'All Projects', icon: Folder },
+    { id: 'new_project', label: 'New Project', icon: PlusCircle },
+    { id: 'in_progress', label: 'In Progress', icon: Clock },
+    { id: 'on_hold', label: 'On Hold', icon: PauseCircle },
+    { id: 'completed', label: 'Completed', icon: CheckCircle2 },
+    { id: 'closed', label: 'Closed', icon: XCircle }
+  ];
+
+  // Mirrors the sub-tabs on the Property Capture table so the sidebar and
+  // the page toolbar always point at the same slice of opportunities.
+  const propertyCaptureSubFilters = [
+    { id: 'all', label: 'All Opportunities', icon: Layers },
+    { id: 'person', label: 'Interested Leads', icon: User },
+    { id: 'branch', label: 'Interested + Property', icon: Building2 },
+    { id: 'property', label: 'Property Opportunities', icon: Store }
+  ];
+
+  return (
+    <>
+      {/* Mobile Backdrop */}
+      {mobileSidebarOpen && (
+        <div 
+          onClick={() => setMobileSidebarOpen(false)}
+          className="fixed inset-0 bg-black/60 z-30 md:hidden backdrop-blur-sm transition-opacity"
+        />
+      )}
+
+      <aside className={`w-[220px] shrink-0 bg-[#111827] text-[#9CA3AF] flex flex-col fixed md:sticky top-0 h-screen z-40 select-none border-r border-[#1F2937] transition-transform duration-300 ${
+        mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}>
+        
+        {/* BRAND HEADER */}
+        <div className="flex items-center justify-between p-3.5 border-b border-[#1F2937]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C99029] to-[#8f6a1c] flex items-center justify-center font-black text-black text-xs shadow-md shrink-0 border border-[#C88A18]/40">
+              MR
+            </div>
+            <div>
+              <div className="font-bold text-white text-[13px] tracking-tight leading-tight">
+                Mystery Rooms
+              </div>
+              <div className="text-[10px] text-[#6B7280] leading-tight font-medium">
+                Enterprise Console
+              </div>
+            </div>
+          </div>
+
+          <button 
+            onClick={() => setMobileSidebarOpen(false)}
+            className="md:hidden p-1 text-gray-400 hover:text-white"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* MAIN NAVIGATION MENU */}
+        <div className="p-2.5 space-y-0.5 border-b border-[#1F2937]">
+          {[
+            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+            { id: 'pms', label: 'PMS', icon: FolderKanban },
+            { id: 'employees', label: 'Employees', icon: Users },
+            { id: 'master_data', label: 'Master Data', icon: Database },
+            { id: 'purchase', label: 'Purchase', icon: ShoppingBag }
+          ].map((item) => {
+            const isActive = activePhase === item.id;
+            const Icon = item.icon;
+            return (
+              <div 
+                key={item.id}
+                onClick={() => {
+                  setActivePhase(item.id);
+                  if (window.innerWidth < 768) setMobileSidebarOpen(false);
+                }}
+                className={`flex items-center justify-between p-2 rounded-lg cursor-pointer text-[12px] font-semibold transition-all ${
+                  isActive 
+                    ? 'bg-[#C88A18] text-white shadow-[0_2px_10px_rgba(200,138,24,0.3)]' 
+                    : 'text-[#9CA3AF] hover:bg-[#172033] hover:text-white'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#6B7280]'}`} />
+                  <span>{item.label}</span>
+                </div>
+                <ChevronRight className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#4B5563]'}`} />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* PROPERTY FMS SECTION */}
+        <div className="flex-1 overflow-y-auto p-2.5 sidebar-scroll space-y-0.5">
+          <div className="pt-1.5 pb-1 px-2">
+            <span className="text-[9.5px] font-bold text-[#6B7280] tracking-wider uppercase">
+              PROPERTY FMS
+            </span>
+          </div>
+
+          {/* ACTIVE ITEM OVERVIEW */}
+          <div 
+            onClick={() => {
+              setActivePhase('overview');
+              if (window.innerWidth < 768) setMobileSidebarOpen(false);
+            }}
+            className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer text-[12px] font-bold transition-all ${
+              activePhase === 'overview'
+                ? 'bg-gradient-to-r from-[#2E2211] via-[#231A0D] to-[#1A1309] text-white border border-[#C88A18]/50 shadow-[0_2px_12px_rgba(200,138,24,0.25)]'
+                : 'text-[#9CA3AF] hover:bg-[#172033] hover:text-white'
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              <MapPin className={`w-4 h-4 ${activePhase === 'overview' ? 'text-[#C88A18]' : 'text-[#6B7280]'}`} />
+              <span className={activePhase === 'overview' ? 'text-white' : 'text-[#9CA3AF]'}>Overview</span>
+            </div>
+            <ChevronRight className={`w-3.5 h-3.5 ${activePhase === 'overview' ? 'text-[#C88A18]' : 'text-[#4B5563]'}`} />
+          </div>
+
+          {/* WORKFLOW MENU ITEMS */}
+          {phases.map((p) => {
+            const isActive = activePhase === p.id;
+            const Icon = p.icon;
+
+            return (
+              <div key={p.id} className="my-0.5">
+                <div
+                  onClick={() => {
+                    setActivePhase(p.id);
+                    if (window.innerWidth < 768) setMobileSidebarOpen(false);
+                  }}
+                  className={`flex items-center justify-between p-2 rounded-xl cursor-pointer transition-all text-[12px] font-semibold ${
+                    isActive
+                      ? 'bg-[#C88A18] text-white shadow-[0_2px_10px_rgba(200,138,24,0.3)]'
+                      : 'text-[#9CA3AF] hover:bg-[#172033] hover:text-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#6B7280]'}`} />
+                    <span>{p.label}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {isActive ? (
+                      <ChevronDown className="w-3.5 h-3.5 text-white" />
+                    ) : (
+                      <ChevronRight className="w-3.5 h-3.5 text-[#4B5563]" />
+                    )}
+                  </div>
+                </div>
+
+                {/* NESTED MENU UNDER ACTIVE PROPERTY CAPTURE */}
+                {isActive && p.id === 1 && (
+                  <div className="ml-3.5 pl-2.5 border-l border-[#1F2937] mt-1 space-y-0.5 py-1">
+                    {propertyCaptureSubFilters.map((sub) => {
+                      const isSubSelected = (currentSubTab || 'all') === sub.id;
+                      const SubIcon = sub.icon;
+                      return (
+                        <div
+                          key={sub.id}
+                          onClick={() => {
+                            if (setCurrentSubTab) setCurrentSubTab(sub.id);
+                            if (window.innerWidth < 768) setMobileSidebarOpen(false);
+                          }}
+                          className={`text-[11px] p-1.5 rounded-md cursor-pointer transition-colors flex items-center gap-2 ${
+                            isSubSelected
+                              ? 'bg-[#172033] text-[#F5E8C8] font-bold border-l-2 border-[#C99029] pl-2'
+                              : 'text-[#9CA3AF] hover:text-white hover:bg-[#172033]/60'
+                          }`}
+                        >
+                          <SubIcon className={`w-3.5 h-3.5 ${isSubSelected ? 'text-[#C99029]' : 'text-[#6B7280]'}`} />
+                          <span>{sub.label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* NESTED MENU UNDER ACTIVE PROJECT CREATION */}
+                {isActive && p.id === 6 && (
+                  <div className="ml-3.5 pl-2.5 border-l border-[#1F2937] mt-1 space-y-0.5 py-1">
+                    {projectSubFilters.map((sub) => {
+                      const isSubSelected = (selectedSubFilter || 'all_projects') === sub.id;
+                      const SubIcon = sub.icon;
+                      return (
+                        <div
+                          key={sub.id}
+                          onClick={() => {
+                            if (setSelectedSubFilter) setSelectedSubFilter(sub.id);
+                            if (window.innerWidth < 768) setMobileSidebarOpen(false);
+                          }}
+                          className={`text-[11px] p-1.5 rounded-md cursor-pointer transition-colors flex items-center gap-2 ${
+                            isSubSelected
+                              ? 'bg-[#172033] text-[#F5E8C8] font-bold border-l-2 border-[#C99029] pl-2'
+                              : 'text-[#9CA3AF] hover:text-white hover:bg-[#172033]/60'
+                          }`}
+                        >
+                          <SubIcon className={`w-3.5 h-3.5 ${isSubSelected ? 'text-[#C99029]' : 'text-[#6B7280]'}`} />
+                          <span>{sub.label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* BOTTOM PROMOTIONAL CARD */}
+          <div className="mt-4 mb-2 p-3 rounded-xl bg-[#131B2A] border border-[#1F2937] relative overflow-hidden shadow-md group">
+            <div className="relative z-10 pr-1 max-w-[125px]">
+              <div className="text-white text-[11px] font-extrabold leading-tight tracking-tight">
+                From<br />
+                Locations<br />
+                to Legendary<br />
+                <span className="text-[#C88A18]">Experiences.</span>
+              </div>
+              <p className="text-[9.5px] text-gray-400 mt-1 leading-snug">
+                Building India's<br />
+                most iconic<br />
+                entertainment venues.
+              </p>
+            </div>
+            <div className="absolute right-2 bottom-2 w-16 h-24 rounded-lg overflow-hidden border border-white/10 shadow-lg">
+              <img src="/sidebar_promo.jpg" alt="Mystery Rooms Building" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            </div>
+          </div>
+
+        </div>
+
+        {/* BOTTOM USER SECTION */}
+        <div className="p-3 border-t border-[#1F2937] bg-[#0B0F19] space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-sm border border-indigo-400/30">
+                HK
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-white text-[12px] font-bold truncate">
+                  Hemant Kushwaha
+                </div>
+                <div className="text-[#6B7280] text-[10px] truncate">
+                  Project Developer
+                </div>
+              </div>
+            </div>
+            <button className="text-gray-400 hover:text-white p-1 rounded-md transition-colors">
+              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between text-[11px] text-[#9CA3AF] pt-1 border-t border-[#1F2937]/60">
+            <button className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <Settings className="w-3.5 h-3.5 text-[#6B7280]" />
+              <span>Settings</span>
+            </button>
+            <button className="flex items-center gap-1.5 hover:text-red-400 transition-colors">
+              <LogOut className="w-3.5 h-3.5 text-[#6B7280]" />
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+
+      </aside>
+    </>
+  );
+}

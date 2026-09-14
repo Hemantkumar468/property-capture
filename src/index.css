@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary: #C99029;
+    --primary-dark: #a97a20;
+    --primary-light: #f6ead2;
+    --sidebar: #0F1423;
+    --sidebar-hover: #191F33;
+    --bg: #F5F6F8;
+    --card: #FFFFFF;
+    --border: #E4E7EB;
+    --text: #1C1D24;
+    --text-soft: #6B7280;
+    --text-faint: #9CA3AF;
+    --success: #10B981;
+    --success-bg: #E8F7EF;
+    --warning: #C99029;
+    --warning-bg: #FEF6E6;
+    --danger: #D64545;
+    --danger-bg: #FCEAEA;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Custom scrollbar for dark sidebar */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ================= CONTAINER QUERIES FOR FLUID RESPONSIVE LAYOUT ================= */
+.cq-main-container {
+  container-type: inline-size;
+  container-name: main-dashboard;
+  width: 100%;
+}
+
+@container main-dashboard (min-width: 1200px) {
+  .cq-cards-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+}
+
+@container main-dashboard (max-width: 1199px) and (min-width: 768px) {
+  .cq-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+  .cq-hero-banner {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+  }
+}
+
+@container main-dashboard (max-width: 767px) {
+  .cq-cards-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+  }
+  .cq-hero-banner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+  .cq-stepper-scroll {
+    overflow-x: auto !important;
+    padding-bottom: 0.5rem !important;
+  }
+  .cq-stepper-inner {
+    min-width: 620px !important;
+  }
+}
